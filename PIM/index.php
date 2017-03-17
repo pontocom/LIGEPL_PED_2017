@@ -31,23 +31,50 @@ if(isset($_POST['username']) && $_POST['username']!="") {
 
     ?>
 
-    <html>
-    <head></head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>PED LIGE-PL 2017 - PIM</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="signin.css" rel="stylesheet">
+
+    </head>
+
     <body>
-    <form action="index.php" method="post">
-        Login: <input type="text" name="username"><br>
-        Password: <input type="password" name="pwd"><br>
-        <input type="submit"><br>
-        Ainda não está registado? Por favor <a href="registar.php">registe-se aqui</a>.
-    </form>
-    <?php
-    if(isset($_GET['status']) && $_GET['status']==0) {
-        echo '<font color="blue">O registo foi bem sucedido! Por favor efectue o login!</font>';
-    }
-    if(isset($_GET['status']) && $_GET['status']==1) {
-        echo '<font color="red">Utilizador inválido!</font>';
-    }
-    ?>
+
+    <div class="container">
+
+        <form class="form-signin" action="index.php" method="post">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <label for="inputEmail" class="sr-only">Username</label>
+            <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <?php
+            if(isset($_GET['status']) && $_GET['status']==0) {
+                echo '<br><font color="blue">O registo foi bem sucedido! Por favor efectue o login!</font>';
+            }
+            if(isset($_GET['status']) && $_GET['status']==1) {
+                echo '<br><font color="red">Utilizador inválido!</font>';
+            }
+            ?>
+        </form>
+
+
+    </div> <!-- /container -->
+
     </body>
     </html>
 
