@@ -1,32 +1,21 @@
 <?php
-session_start();
 
 if(isset($_POST['username']) && $_POST['username']!="") {
+    // efectuar a ligação ao servidor de BD
 
-// efectuar a ligação ao servidor de BD
+        $db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
 
-    $db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
+    // construir a query de INSERT que guarda o registo na BD
+        $sql = "INSERT INTO user_pim (username, passwd) VALUES ('".$_POST['username']."', '".sha1($_POST['pwd'])."')";
+        echo $sql;
 
-// construir a query de INSERT que guarda o registo na BD
-    $sql = "SELECT * FROM user_pim WHERE username= '" . $_POST['username'] . "' AND passwd = '" . sha1($_POST['pwd']) . "'";
-
-    $rs = mysqli_query($db, $sql);
-
-    $r = mysqli_fetch_row($rs);
-
-
-    if ($r == false) {
-        header("Location: index.php?status=1");
+    if(mysqli_query($db, $sql)) {
+        header("Location: index.php?status=0");
     } else {
-
-        $_SESSION['log_status'] = 1;
-        $_SESSION['username'] = $r[1];
-        $_SESSION['user_id'] = $r[0];
-        header("Location: pim.php");
+        header("Location: registo.php?status=1");
     }
 
     mysqli_close($db);
-
 } else {
 
     ?>
@@ -55,20 +44,17 @@ if(isset($_POST['username']) && $_POST['username']!="") {
 
     <div class="container">
 
-        <form class="form-signin" action="index.php" method="post">
-            <h2 class="form-signin-heading">Please sign in</h2>
+        <form class="form-signin" action="registo.php" method="post">
+            <h2 class="form-signin-heading">Please register</h2>
             <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" required autofocus>
             <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <input type="password" id="inputPassword" name="repwd" class="form-control" placeholder="Re-type password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
             <?php
-            if(isset($_GET['status']) && $_GET['status']==0) {
-                echo '<br><font color="blue">O registo foi bem sucedido! Por favor efectue o login!</font>';
-            }
             if(isset($_GET['status']) && $_GET['status']==1) {
-                echo '<br><font color="red">Utilizador inválido!</font>';
+                echo '<font color="red">Não foi possível registar o utilizador!</font>';
             }
             ?>
-            <br>Pode efectuar o <a href="registo.php"> registo aqui.</a>
         </form>
 
 
@@ -76,6 +62,7 @@ if(isset($_POST['username']) && $_POST['username']!="") {
 
     </body>
     </html>
+
 
     <?php
 }
