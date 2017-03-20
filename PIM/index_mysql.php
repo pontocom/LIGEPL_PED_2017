@@ -1,41 +1,23 @@
 <?php
 /**
- * Esta versão mais recente vai usar PDO
+ * Este exemplo usa o MySQL com o "mysqli", para interagir com a BD
+ * A versão mais recente vai usar PDO - Portable Data Objects
  */
 session_start();
 
 if(isset($_POST['username']) && $_POST['username']!="") {
 
 // efectuar a ligação ao servidor de BD
-    try {
-        $db = new PDO('mysql:host=127.0.0.1;dbname=pim_ligepl;charset=utf8mb4', 'root', 'bitnami');
-    } catch (PDOException $e) {
-        die("Não foi possível ligar ao servidor de BD!!!" + $e);
-    }
 
-    //$db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
+    $db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
 
 // construir a query de INSERT que guarda o registo na BD
-    //$sql = "SELECT * FROM user_pim WHERE username= '" . $_POST['username'] . "' AND passwd = '" . sha1($_POST['pwd']) . "'";
+    $sql = "SELECT * FROM user_pim WHERE username= '" . $_POST['username'] . "' AND passwd = '" . sha1($_POST['pwd']) . "'";
 
-    $sql = $db->prepare("SELECT * FROM user_pim WHERE username=? AND passwd=?");
+    $rs = mysqli_query($db, $sql);
 
-    $sql->execute([$_POST['username'], sha1($_POST['pwd'])]);
-    $rs = $sql->fetchAll(PDO::FETCH_ASSOC);
+    $r = mysqli_fetch_row($rs);
 
-    //$rs = mysqli_query($db, $sql);
-    //$r = mysqli_fetch_row($rs);
-
-    if(empty($rs)) {
-        header("Location: index.php?status=1");
-    } else {
-        $_SESSION['log_status'] = 1;
-        $_SESSION['username'] = $rs[0]['username'];
-        $_SESSION['user_id'] = $rs[0]['id'];
-        header("Location: pim.php");
-    }
-
-    /*
     if ($r == false) {
         header("Location: index.php?status=1");
     } else {
@@ -47,7 +29,6 @@ if(isset($_POST['username']) && $_POST['username']!="") {
     }
 
     mysqli_close($db);
-    */
 
 } else {
 
@@ -77,7 +58,7 @@ if(isset($_POST['username']) && $_POST['username']!="") {
 
     <div class="container">
 
-        <form class="form-signin" action="index.php" method="post">
+        <form class="form-signin" action="index_mysql.php" method="post">
             <h2 class="form-signin-heading">Please sign in</h2>
             <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" required autofocus>
             <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>

@@ -3,19 +3,21 @@
 if(isset($_POST['username']) && $_POST['username']!="") {
     // efectuar a ligação ao servidor de BD
 
-        $db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
+    try {
+        $db = new PDO('mysql:host=127.0.0.1;dbname=pim_ligepl;charset=utf8mb4', 'root', 'bitnami');
+    } catch (PDOException $e) {
+        die("Não foi possível ligar ao servidor de BD!!!" + $e);
+    }
 
     // construir a query de INSERT que guarda o registo na BD
-        $sql = "INSERT INTO user_pim (username, passwd) VALUES ('".$_POST['username']."', '".sha1($_POST['pwd'])."')";
-        echo $sql;
+    $sql = $db->prepare("INSERT INTO user_pim (username, passwd) VALUES (?,?)");
 
-    if(mysqli_query($db, $sql)) {
+    if($sql->execute([$_POST['username'], sha1($_POST['pwd'])])){
         header("Location: index.php?status=0");
     } else {
         header("Location: registo.php?status=1");
     }
 
-    mysqli_close($db);
 } else {
 
     ?>
@@ -49,7 +51,7 @@ if(isset($_POST['username']) && $_POST['username']!="") {
             <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" required autofocus>
             <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>
             <input type="password" id="inputPassword" name="repwd" class="form-control" placeholder="Re-type password" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            <button class="btn btn-lg btn-primary btn-block" style="margin-top: 10px" type="submit">Register</button>
             <?php
             if(isset($_GET['status']) && $_GET['status']==1) {
                 echo '<font color="red">Não foi possível registar o utilizador!</font>';
