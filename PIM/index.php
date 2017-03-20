@@ -13,18 +13,12 @@ if(isset($_POST['username']) && $_POST['username']!="") {
         die("Não foi possível ligar ao servidor de BD!!!" + $e);
     }
 
-    //$db = mysqli_connect("127.0.0.1", "root", "bitnami", "pim_ligepl") or die("Não foi possível ligar ao servidor de BD!!!");
-
 // construir a query de INSERT que guarda o registo na BD
-    //$sql = "SELECT * FROM user_pim WHERE username= '" . $_POST['username'] . "' AND passwd = '" . sha1($_POST['pwd']) . "'";
 
     $sql = $db->prepare("SELECT * FROM user_pim WHERE username=? AND passwd=?");
 
     $sql->execute([$_POST['username'], sha1($_POST['pwd'])]);
     $rs = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-    //$rs = mysqli_query($db, $sql);
-    //$r = mysqli_fetch_row($rs);
 
     if(empty($rs)) {
         header("Location: index.php?status=1");
@@ -34,20 +28,6 @@ if(isset($_POST['username']) && $_POST['username']!="") {
         $_SESSION['user_id'] = $rs[0]['id'];
         header("Location: pim.php");
     }
-
-    /*
-    if ($r == false) {
-        header("Location: index.php?status=1");
-    } else {
-
-        $_SESSION['log_status'] = 1;
-        $_SESSION['username'] = $r[1];
-        $_SESSION['user_id'] = $r[0];
-        header("Location: pim.php");
-    }
-
-    mysqli_close($db);
-    */
 
 } else {
 
