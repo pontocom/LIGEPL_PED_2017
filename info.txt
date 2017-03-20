@@ -1,0 +1,12 @@
+Informação para colocar o MySQL Bitnami a aceitar ligações do exterior da VM:
+1. Editar a configuração do MYSQL
+sudo nano /opt/bitnami/mysql/my.cnf
+(comentar a linha do bind-address)
+2. Permitir ligações na firewall
+sudo ufw allow 3306
+3. Dar permissões a utilizadores remotos no MySQL
+(lançar a consola de MySQL como root e escrever)
+mysql> grant all privileges on *.* to 'root'@'%' identified by 'root_password';
+mysql> flush privileges;
+4. Relançar o MySQL
+sudo /opt/bitnami/ctlscript.sh restart mysql
