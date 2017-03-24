@@ -64,10 +64,10 @@ if(isset($_POST['username']) && $_POST['username']!="") {
             <button class="btn btn-lg btn-primary btn-block" style="margin-top: 10px" type="submit">Sign in</button>
             <?php
             if(isset($_GET['status']) && $_GET['status']==0) {
-                echo '<br><font color="blue">O registo foi bem sucedido! Por favor efectue o login!</font>';
+                echo '<br><div class="alert alert-success" role="alert">O registo foi bem sucedido! Por favor efectue o login!</div>';
             }
             if(isset($_GET['status']) && $_GET['status']==1) {
-                echo '<br><font color="red">Utilizador inválido!</font>';
+                echo '<br><div class="alert alert-danger" role="alert">Utilizador inválido!</div>';
             }
             ?>
             <br>Pode efectuar o <a href="registo.php"> registo aqui.</a>

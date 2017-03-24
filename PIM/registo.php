@@ -54,7 +54,7 @@ if(isset($_POST['username']) && $_POST['username']!="") {
             <button class="btn btn-lg btn-primary btn-block" style="margin-top: 10px" type="submit">Register</button>
             <?php
             if(isset($_GET['status']) && $_GET['status']==1) {
-                echo '<font color="red">Não foi possível registar o utilizador!</font>';
+                echo '<br><div class="alert alert-danger" role="alert">Não foi possível registar o utilizador!</div>';
             }
             ?>
         </form>
